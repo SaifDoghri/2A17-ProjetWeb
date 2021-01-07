@@ -1,10 +1,10 @@
 <?php
 session_start();
-include  $_SERVER['DOCUMENT_ROOT']."/Model/Forum.php";
-include  $_SERVER['DOCUMENT_ROOT']."/Controller/ForumC.php";
+include  $_SERVER['DOCUMENT_ROOT']."/Model/Question.php";
+include  $_SERVER['DOCUMENT_ROOT']."/Controller/QuestionC.php";
 
-$forumC= new ForumC();
-$list=$forumC->afficherCategories();
+$questionC= new QuestionC();
+$list=$questionC->afficherQuestions();
 
 ?>
 <!DOCTYPE html>
@@ -52,25 +52,25 @@ $list=$forumC->afficherCategories();
                             <p>Dashboard</p>
                         </a>
                     </li>
-                    <li class="active">
-                        <a href="#">
+                    <li class="">
+                        <a href="AfficherForums.php">
                             <i class="now-ui-icons design_app"></i>
                             <p>Liste Forums</p>
                         </a>
                     </li>
-                    <li>
+                    <li class="">
                         <a href="AfficherCategories.php">
                             <i class="now-ui-icons design_app"></i>
                             <p>Liste Categories</p>
                         </a>
                     </li>
-                    <li>
-                        <a href="AfficherQuestions.php">
+                    <li class="active">
+                        <a href="#">
                             <i class="now-ui-icons design_app"></i>
                             <p>Liste Questions</p>
                         </a>
                     </li>
-                    <li>
+                    <li class="">
                         <a href="AfficherSuivis.php">
                             <i class="now-ui-icons design_app"></i>
                             <p>Liste Suivis</p>
@@ -194,7 +194,7 @@ $list=$forumC->afficherCategories();
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <form class="form-inline" method="POST" action="pdfForum.php" >
+                            <form class="form-inline" method="POST" action="pdf.php" >
                                 <fieldset >
 
                                     <div class="form-group">
@@ -206,30 +206,33 @@ $list=$forumC->afficherCategories();
                                     </div>
                                 </fieldset>
                             </form>
-                            <h4 class="card-title"> Gestion Forums</h4>
+                            <form method="POST" action="AjouterQuestions.php">
+                                <input type="submit" class="btn btn-succed" value="Ajouter" name="ajouter" href="AjouterQuestions.php">
+                            </form>
+
+                            <h4 class="card-title"> Gestion Questions</h4>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <div id="piechart" style="width: 900px; height: 500px;"></div>
                                 <table class="table">
                                     <thead class=" text-primary">
                                     <th>
-                                        Categorie
+                                        Question 1
                                     </th>
                                     <th>
-                                        Par
+                                        Question 2
                                     </th>
                                     <th>
-                                        Sujet
+                                        Question 3
                                     </th>
                                     <th>
-                                        Description
+                                        Question 4
                                     </th>
                                     <th>
-                                        Etat
+                                        Question 5
                                     </th>
                                     <th>
-                                        Commentaires
+                                        Modifier
                                     </th>
                                     <th>
                                         Supprimer
@@ -245,57 +248,57 @@ $list=$forumC->afficherCategories();
                 </div>
             </div>
         </div>
-            <footer class="footer">
-                <div class=" container-fluid ">
-                    <nav>
-                        <ul>
-                            <li>
-                                <a href="https://www.creative-tim.com">
-                                    Creative Tim
-                                </a>
-                            </li>
-                            <li>
-                                <a href="http://presentation.creative-tim.com">
-                                    About Us
-                                </a>
-                            </li>
-                            <li>
-                                <a href="http://blog.creative-tim.com">
-                                    Blog
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                    <div class="copyright" id="copyright">
-                        &copy; <script>
-                            document.getElementById('copyright').appendChild(document.createTextNode(new Date().getFullYear()))
-                        </script>, Designed by <a href="https://www.invisionapp.com" target="_blank">Invision</a>. Coded by <a href="https://www.creative-tim.com" target="_blank">Creative Tim</a>.
-                    </div>
+        <footer class="footer">
+            <div class=" container-fluid ">
+                <nav>
+                    <ul>
+                        <li>
+                            <a href="https://www.creative-tim.com">
+                                Creative Tim
+                            </a>
+                        </li>
+                        <li>
+                            <a href="http://presentation.creative-tim.com">
+                                About Us
+                            </a>
+                        </li>
+                        <li>
+                            <a href="http://blog.creative-tim.com">
+                                Blog
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="copyright" id="copyright">
+                    &copy; <script>
+                        document.getElementById('copyright').appendChild(document.createTextNode(new Date().getFullYear()))
+                    </script>, Designed by <a href="https://www.invisionapp.com" target="_blank">Invision</a>. Coded by <a href="https://www.creative-tim.com" target="_blank">Creative Tim</a>.
                 </div>
-            </footer>
-        </div>
+            </div>
+        </footer>
     </div>
-    <!--   Core JS Files   -->
-    <script src="../assets/js/core/jquery.min.js"></script>
-    <script src="../assets/js/core/popper.min.js"></script>
-    <script src="../assets/js/core/bootstrap.min.js"></script>
-    <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-    <!--  Google Maps Plugin    -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
-    <!-- Chart JS -->
-    <script src="../assets/js/plugins/chartjs.min.js"></script>
-    <!--  Notifications Plugin    -->
-    <script src="../assets/js/plugins/bootstrap-notify.js"></script>
-    <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
-    <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script><!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
-    <script src="../assets/demo/demo.js"></script>
+</div>
+<!--   Core JS Files   -->
+<script src="../assets/js/core/jquery.min.js"></script>
+<script src="../assets/js/core/popper.min.js"></script>
+<script src="../assets/js/core/bootstrap.min.js"></script>
+<script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+<!--  Google Maps Plugin    -->
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+<!-- Chart JS -->
+<script src="../assets/js/plugins/chartjs.min.js"></script>
+<!--  Notifications Plugin    -->
+<script src="../assets/js/plugins/bootstrap-notify.js"></script>
+<!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+<script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script><!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
+<script src="../assets/demo/demo.js"></script>
 <script type = "text/javascript">
     $(document).ready(function(){
         load_data();
         function load_data(str)
         {
             $.ajax({
-                url:"ajaxForum.php",
+                url:"ajaxQuestion.php",
                 method:"post",
                 data:{str:str},
                 success:function(data)

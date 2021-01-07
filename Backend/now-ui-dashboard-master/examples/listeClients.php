@@ -1,11 +1,16 @@
 <?php
 session_start();
-include  $_SERVER['DOCUMENT_ROOT']."/Model/Forum.php";
-include  $_SERVER['DOCUMENT_ROOT']."/Controller/ForumC.php";
-
-$forumC= new ForumC();
-$list=$forumC->afficherCategories();
-
+include_once $_SERVER['DOCUMENT_ROOT']."\Controller\clientContoller.php";
+include_once $_SERVER['DOCUMENT_ROOT']."\Controller\inscriptionController.php";
+$clientC=new clientContoller();
+$filter=0;
+$inscriptionC=new inscriptionController();
+$listeClients=$clientC->afficherClients();
+if(isset($_POST['inscrit'])){
+    if(!empty($_POST['inscrit'])){
+        $filter=1;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,41 +57,23 @@ $list=$forumC->afficherCategories();
                             <p>Dashboard</p>
                         </a>
                     </li>
-                    <li class="active">
-                        <a href="#">
-                            <i class="now-ui-icons design_app"></i>
-                            <p>Liste Forums</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="AfficherCategories.php">
-                            <i class="now-ui-icons design_app"></i>
-                            <p>Liste Categories</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="AfficherQuestions.php">
-                            <i class="now-ui-icons design_app"></i>
-                            <p>Liste Questions</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="AfficherSuivis.php">
-                            <i class="now-ui-icons design_app"></i>
-                            <p>Liste Suivis</p>
-                        </a>
-                    </li>
                 <?php }?>
+                <li>
+                    <a href="user.php">
+                        <i class="now-ui-icons users_single-02"></i>
+                        <p>User Profile</p>
+                    </a>
+                </li>
                 <?php if(isset($_SESSION['Client'])){?>
-                    <li>
-                        <a href="./listeMedecins.php">
-                            <i class="now-ui-icons text_caps-small"></i>
-                            <p>Liste Medecins</p>
-                        </a>
-                    </li>
+                <li>
+                    <a href="./listeMedecins.php">
+                        <i class="now-ui-icons text_caps-small"></i>
+                        <p>Liste Medecins</p>
+                    </a>
+                </li>
                 <?php }?>
                 <?php if(isset($_SESSION['Medecin'])){?>
-                    <li class="">
+                    <li class="active">
                         <a href="./listeClients.php">
                             <i class="now-ui-icons text_caps-small"></i>
                             <p>Liste Clients</p>
@@ -104,18 +91,6 @@ $list=$forumC->afficherCategories();
                         <a href="./listeMedecinsAdmin.php">
                             <i class="now-ui-icons text_caps-small"></i>
                             <p>Liste Medecins</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="./listeProduits.php">
-                            <i class="now-ui-icons text_caps-small"></i>
-                            <p>Liste Produits</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="./ajouterProduit.php">
-                            <i class="now-ui-icons text_caps-small"></i>
-                            <p>Ajouter Produit</p>
                         </a>
                     </li>
                 <?php }?>
@@ -194,57 +169,27 @@ $list=$forumC->afficherCategories();
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <form class="form-inline" method="POST" action="pdfForum.php" >
-                                <fieldset >
-
-                                    <div class="form-group">
-
-
-                                        <input type="submit" name="telecharger pdf" value="telecharger pdf" class="btn btn-info">
-                                        <input type="text" placeholder="Recherche" class="form-control" id="rech" >
-
-                                    </div>
-                                </fieldset>
-                            </form>
-                            <h4 class="card-title"> Gestion Forums</h4>
+                            <h5 class="title">Liste des Clients Inscrits</h5>
                         </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <div id="piechart" style="width: 900px; height: 500px;"></div>
-                                <table class="table">
-                                    <thead class=" text-primary">
-                                    <th>
-                                        Categorie
-                                    </th>
-                                    <th>
-                                        Par
-                                    </th>
-                                    <th>
-                                        Sujet
-                                    </th>
-                                    <th>
-                                        Description
-                                    </th>
-                                    <th>
-                                        Etat
-                                    </th>
-                                    <th>
-                                        Commentaires
-                                    </th>
-                                    <th>
-                                        Supprimer
-                                    </th>
-                                    </thead>
-                                    <tbody id="tableau">
-
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div class="card-body all-icons">
+                            <?php foreach ($listeClients as $client){?>
+                                    <?php if($inscriptionC->checkInscription($client['idClient'],$_SESSION['Medecin']['idMedecin'])!=0){?>
+                                <div class="row">
+                                    <div class="font-icon-detail m-5 w-100 row">
+                                        <div class="m-5 w-25" >
+                                            <strong>First Name</strong>:<?php echo $client['prenom'];?>
+                                        </div>
+                                        <div class="m-5 w-25">
+                                            <strong>Last Name:</strong><?php echo $client['nom'];?>
+                                        </div>
+                                    </div>
+                                </div>
+                                        <?php }?>
+                            <?php }?>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
             <footer class="footer">
                 <div class=" container-fluid ">
                     <nav>
@@ -289,36 +234,6 @@ $list=$forumC->afficherCategories();
     <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script><!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
     <script src="../assets/demo/demo.js"></script>
-<script type = "text/javascript">
-    $(document).ready(function(){
-        load_data();
-        function load_data(str)
-        {
-            $.ajax({
-                url:"ajaxForum.php",
-                method:"post",
-                data:{str:str},
-                success:function(data)
-                {
-                    $('#tableau').html(data);
-                }
-            });
-        }
-
-        $('#rech').keyup(function(){
-            var recherche = $(this).val();
-            if(recherche != '')
-            {
-                load_data(recherche);
-            }
-            else
-            {
-                load_data();
-            }
-        });
-    });
-</script>
-
 </body>
 
 </html>
